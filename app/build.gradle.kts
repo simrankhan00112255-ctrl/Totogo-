@@ -65,6 +65,11 @@ android {
     buildConfig = true
   }
   testOptions { unitTests { isIncludeAndroidResources = true } }
+  packaging {
+    jniLibs {
+      useLegacyPackaging = false
+    }
+  }
   dependenciesInfo {
     includeInApk = false
     includeInBundle = true
