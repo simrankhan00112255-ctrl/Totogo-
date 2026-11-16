@@ -1,0 +1,6 @@
+{
+  "name": "TOTO GO",
+  "description": "Local electric TOTO & E-Rickshaw ride-booking platform for Chopra and Uttar Dinajpur, West Bengal.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

@@ -1,0 +1,279 @@
+{
+  "entities": {
+    "User": {
+      "title": "User",
+      "description": "Registered TOTO GO user account with role and language preference.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Firebase Auth UID of the user." },
+        "fullName": { "type": "string", "description": "Full display name of the user." },
+        "email": { "type": "string", "description": "Google account email address." },
+        "mobileNumber": { "type": "string", "description": "User mobile phone number." },
+        "mobileVerified": { "type": "boolean", "description": "Whether mobile OTP verification was completed." },
+        "preferredLanguage": { "type": "string", "enum": ["bn", "en"], "description": "Preferred app UI language." },
+        "role": { "type": "string", "enum": ["passenger", "driver", "admin"], "description": "Active user role." },
+        "photoBase64": { "type": "string", "description": "Compressed profile image encoded as base64." },
+        "isSuspended": { "type": "boolean", "description": "Whether the account is suspended by admin." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp when created." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp when last updated." }
+      },
+      "required": ["userId", "fullName", "role", "preferredLanguage", "mobileVerified", "isSuspended", "createdAt"]
+    },
+    "Driver": {
+      "title": "Driver",
+      "description": "Private driver registration, verification status, licence, and earnings.",
+      "type": "object",
+      "properties": {
+        "driverId": { "type": "string", "description": "Firebase Auth UID of the driver." },
+        "fullName": { "type": "string", "description": "Driver full name." },
+        "mobileNumber": { "type": "string", "description": "Driver mobile number." },
+        "mobileVerified": { "type": "boolean", "description": "OTP verification flag." },
+        "registrationNumber": { "type": "string", "description": "TOTO vehicle registration number." },
+        "vehicleType": { "type": "string", "description": "Electric TOTO / E-Rickshaw model type." },
+        "vehicleModel": { "type": "string", "description": "TOTO manufacturer/model name." },
+        "serviceArea": { "type": "string", "description": "Primary Chopra / Uttar Dinajpur service zone." },
+        "licenceNumber": { "type": "string", "description": "Driving licence details where applicable." },
+        "permitNumber": { "type": "string", "description": "Local vehicle permit number." },
+        "profilePhotoBase64": { "type": "string", "description": "Driver clear portrait photo." },
+        "status": { "type": "string", "enum": ["pending_verification", "approved", "rejected", "suspended"], "description": "Admin verification status." },
+        "rejectionReason": { "type": "string", "description": "Optional reason when rejected or suspended." },
+        "totalTrips": { "type": "integer", "description": "Completed trips count." },
+        "totalEarnings": { "type": "number", "description": "Total earnings in INR." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["driverId", "fullName", "mobileNumber", "mobileVerified", "registrationNumber", "vehicleType", "serviceArea", "status", "totalTrips", "totalEarnings", "createdAt"]
+    },
+    "Vehicle": {
+      "title": "Vehicle",
+      "description": "Private vehicle photographs and permit documents for admin verification.",
+      "type": "object",
+      "properties": {
+        "driverId": { "type": "string", "description": "Owning driver UID." },
+        "registrationNumber": { "type": "string", "description": "Vehicle registration plate." },
+        "vehicleType": { "type": "string", "description": "TOTO type." },
+        "vehicleModel": { "type": "string", "description": "TOTO manufacturer/model name." },
+        "frontPhotoBase64": { "type": "string", "description": "TOTO front photo." },
+        "rearPhotoBase64": { "type": "string", "description": "TOTO rear photo." },
+        "sidePhotoBase64": { "type": "string", "description": "TOTO side photo." },
+        "licenceDocBase64": { "type": "string", "description": "Driving licence document image." },
+        "permitDocBase64": { "type": "string", "description": "Vehicle permit document image." },
+        "photosVerified": { "type": "boolean", "description": "Admin vehicle photo verification status." },
+        "docsVerified": { "type": "boolean", "description": "Admin vehicle document verification status." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["driverId", "registrationNumber", "vehicleType", "photosVerified", "docsVerified", "createdAt"]
+    },
+    "DriverPublic": {
+      "title": "DriverPublic",
+      "description": "Approved public driver and TOTO vehicle identity visible to passengers.",
+      "type": "object",
+      "properties": {
+        "driverId": { "type": "string", "description": "Approved driver UID." },
+        "fullName": { "type": "string", "description": "Driver full name." },
+        "registrationNumber": { "type": "string", "description": "Approved TOTO registration number." },
+        "vehicleType": { "type": "string", "description": "TOTO vehicle type." },
+        "vehicleModel": { "type": "string", "description": "TOTO manufacturer/model name." },
+        "serviceArea": { "type": "string", "description": "Chopra service area." },
+        "isVerified": { "type": "boolean", "description": "Admin verified flag." },
+        "isOnline": { "type": "boolean", "description": "Driver live online availability." },
+        "currentLat": { "type": "number", "description": "Real GPS latitude when available." },
+        "currentLng": { "type": "number", "description": "Real GPS longitude when available." },
+        "hasGpsFix": { "type": "boolean", "description": "True only when coordinates come from real GPS." },
+        "profilePhotoBase64": { "type": "string", "description": "Approved original driver photograph." },
+        "frontPhotoBase64": { "type": "string", "description": "Approved TOTO front photograph." },
+        "rearPhotoBase64": { "type": "string", "description": "Approved TOTO rear photograph." },
+        "sidePhotoBase64": { "type": "string", "description": "Approved TOTO side photograph." },
+        "ratingAvg": { "type": "number", "description": "Average star rating." },
+        "ratingCount": { "type": "integer", "description": "Number of verified ratings." },
+        "lastRatedBookingId": { "type": "string", "description": "Last booking ID used to update rating atomically." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["driverId", "fullName", "registrationNumber", "vehicleType", "serviceArea", "isVerified", "isOnline", "currentLat", "currentLng", "hasGpsFix", "ratingAvg", "ratingCount", "updatedAt"]
+    },
+    "Booking": {
+      "title": "Booking",
+      "description": "Real-time TOTO ride booking lifecycle record.",
+      "type": "object",
+      "properties": {
+        "passengerId": { "type": "string", "description": "Passenger UID." },
+        "passengerName": { "type": "string", "description": "Passenger display name." },
+        "passengerMobile": { "type": "string", "description": "Passenger mobile number for driver contact." },
+        "driverId": { "type": "string", "description": "Assigned driver UID once accepted." },
+        "driverName": { "type": "string", "description": "Assigned driver name." },
+        "driverPhone": { "type": "string", "description": "Assigned driver mobile number for passenger contact." },
+        "vehicleRegNumber": { "type": "string", "description": "Assigned TOTO registration number." },
+        "vehicleType": { "type": "string", "description": "Assigned TOTO vehicle type details." },
+        "pickupName": { "type": "string", "description": "Pickup location name or address." },
+        "pickupLat": { "type": "number", "description": "Pickup latitude." },
+        "pickupLng": { "type": "number", "description": "Pickup longitude." },
+        "destinationName": { "type": "string", "description": "Destination location name." },
+        "destinationLat": { "type": "number", "description": "Destination latitude." },
+        "destinationLng": { "type": "number", "description": "Destination longitude." },
+        "distanceKm": { "type": "number", "description": "Calculated distance in kilometres." },
+        "estimatedFare": { "type": "number", "description": "Estimated fare in INR." },
+        "finalFare": { "type": "number", "description": "Final settled fare in INR." },
+        "paymentMethod": { "type": "string", "enum": ["cash", "upi_future"], "description": "Payment mode." },
+        "status": { "type": "string", "enum": ["searching", "assigned", "arriving", "started", "completed", "cancelled"], "description": "Booking workflow status." },
+        "cancelReason": { "type": "string", "description": "Optional cancellation note." },
+        "driverLat": { "type": "number", "description": "Live driver GPS latitude during trip." },
+        "driverLng": { "type": "number", "description": "Live driver GPS longitude during trip." },
+        "hasRated": { "type": "boolean", "description": "Whether passenger rated this completed ride." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["passengerId", "passengerName", "pickupName", "pickupLat", "pickupLng", "destinationName", "destinationLat", "destinationLng", "distanceKm", "estimatedFare", "paymentMethod", "status", "hasRated", "createdAt"]
+    },
+    "FareSettings": {
+      "title": "FareSettings",
+      "description": "Admin-configured Chopra fare rules in Indian Rupees.",
+      "type": "object",
+      "properties": {
+        "minFare": { "type": "number", "description": "Minimum base fare in INR." },
+        "perKmFare": { "type": "number", "description": "Standard per-kilometre fare in INR." },
+        "minDistanceKm": { "type": "number", "description": "Distance covered by minimum fare." },
+        "additionalDistanceFarePerKm": { "type": "number", "description": "Extra charge per km beyond threshold." },
+        "waitingChargePerMin": { "type": "number", "description": "Waiting fee per minute in INR." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["minFare", "perKmFare", "minDistanceKm", "additionalDistanceFarePerKm", "waitingChargePerMin", "updatedAt"]
+    },
+    "FixedRoute": {
+      "title": "FixedRoute",
+      "description": "Route-based fixed fare rule configured by admin.",
+      "type": "object",
+      "properties": {
+        "originName": { "type": "string", "description": "Origin hub name." },
+        "destinationName": { "type": "string", "description": "Destination hub name." },
+        "fixedFare": { "type": "number", "description": "Fixed fare in INR." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["originName", "destinationName", "fixedFare", "updatedAt"]
+    },
+    "Rating": {
+      "title": "Rating",
+      "description": "Passenger rating for a completed ride.",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string", "description": "Completed booking document ID." },
+        "passengerId": { "type": "string", "description": "Rating passenger UID." },
+        "driverId": { "type": "string", "description": "Rated driver UID." },
+        "stars": { "type": "integer", "description": "Star score from 1 to 5." },
+        "comment": { "type": "string", "description": "Optional review feedback." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." }
+      },
+      "required": ["bookingId", "passengerId", "driverId", "stars", "createdAt"]
+    },
+    "Complaint": {
+      "title": "Complaint",
+      "description": "Safety complaint or support ticket submitted by passenger or driver.",
+      "type": "object",
+      "properties": {
+        "reporterId": { "type": "string", "description": "Reporting user UID." },
+        "reporterRole": { "type": "string", "enum": ["passenger", "driver"], "description": "Role of reporter." },
+        "targetUserId": { "type": "string", "description": "Reported user or driver UID." },
+        "bookingId": { "type": "string", "description": "Related booking ID if applicable." },
+        "category": { "type": "string", "description": "Complaint category." },
+        "description": { "type": "string", "description": "Detailed report description." },
+        "status": { "type": "string", "enum": ["open", "in_review", "resolved"], "description": "Admin review status." },
+        "adminNotes": { "type": "string", "description": "Resolution notes from admin." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." },
+        "updatedAt": { "type": "string", "format": "date-time", "description": "Server timestamp on update." }
+      },
+      "required": ["reporterId", "reporterRole", "targetUserId", "category", "description", "status", "createdAt"]
+    },
+    "NotificationItem": {
+      "title": "NotificationItem",
+      "description": "In-app booking and status notification.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "description": "Recipient UID." },
+        "senderId": { "type": "string", "description": "Triggering user UID." },
+        "bookingId": { "type": "string", "description": "Associated booking ID." },
+        "title": { "type": "string", "description": "Notification title." },
+        "body": { "type": "string", "description": "Notification message." },
+        "type": { "type": "string", "description": "Notification event category." },
+        "isRead": { "type": "boolean", "description": "Read status flag." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." }
+      },
+      "required": ["userId", "senderId", "title", "body", "type", "isRead", "createdAt"]
+    },
+    "AdminRecord": {
+      "title": "AdminRecord",
+      "description": "Authorized administrator registry entry.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Admin Firebase Auth UID." },
+        "email": { "type": "string", "description": "Admin Google email." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." }
+      },
+      "required": ["uid", "email", "createdAt"]
+    },
+    "AdminAuditLog": {
+      "title": "AdminAuditLog",
+      "description": "Immutable audit log of sensitive administrator actions.",
+      "type": "object",
+      "properties": {
+        "adminId": { "type": "string", "description": "UID of the acting administrator." },
+        "adminEmail": { "type": "string", "description": "Email of the acting administrator." },
+        "action": { "type": "string", "description": "Action code (e.g. APPROVE_DRIVER, UPDATE_FARE_SETTINGS)." },
+        "targetType": { "type": "string", "description": "Target entity type." },
+        "targetId": { "type": "string", "description": "Target document or user ID." },
+        "details": { "type": "string", "description": "Human-readable action summary." },
+        "createdAt": { "type": "string", "format": "date-time", "description": "Server timestamp on creation." }
+      },
+      "required": ["adminId", "adminEmail", "action", "targetType", "targetId", "details", "createdAt"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": { "$ref": "#/entities/User" },
+      "description": "User accounts and PII isolated by owner UID."
+    },
+    "/drivers/{driverId}": {
+      "schema": { "$ref": "#/entities/Driver" },
+      "description": "Private driver applications, verification state, and earnings."
+    },
+    "/vehicles/{vehicleId}": {
+      "schema": { "$ref": "#/entities/Vehicle" },
+      "description": "Private TOTO photographs and licence/permit documents."
+    },
+    "/drivers_public/{driverId}": {
+      "schema": { "$ref": "#/entities/DriverPublic" },
+      "description": "Admin-verified public driver & TOTO booking profile."
+    },
+    "/bookings/{bookingId}": {
+      "schema": { "$ref": "#/entities/Booking" },
+      "description": "Real-time ride bookings and lifecycle transitions."
+    },
+    "/fare_settings/{settingId}": {
+      "schema": { "$ref": "#/entities/FareSettings" },
+      "description": "Platform fare parameters configured by admin."
+    },
+    "/fare_settings/{settingId}/fixed_routes/{routeId}": {
+      "schema": { "$ref": "#/entities/FixedRoute" },
+      "description": "Route-based fixed fares subcollection."
+    },
+    "/ratings/{ratingId}": {
+      "schema": { "$ref": "#/entities/Rating" },
+      "description": "Immutable passenger ride ratings."
+    },
+    "/complaints/{complaintId}": {
+      "schema": { "$ref": "#/entities/Complaint" },
+      "description": "Safety reports and support tickets."
+    },
+    "/notifications/{notificationId}": {
+      "schema": { "$ref": "#/entities/NotificationItem" },
+      "description": "User-scoped ride status notifications."
+    },
+    "/admins/{adminId}": {
+      "schema": { "$ref": "#/entities/AdminRecord" },
+      "description": "Authorized administrator accounts."
+    },
+    "/admin_audit_logs/{logId}": {
+      "schema": { "$ref": "#/entities/AdminAuditLog" },
+      "description": "Immutable administrator action audit trail."
+    }
+  }
+}
